@@ -17,8 +17,8 @@ This package is not supposed to be an XML parser.
 It can understand only a very simple subset of SVG.
 The intent is to limit complexity low enough to allow
 using very defensive RegExps for parsing.
-The downside of this simplicity is that any fancy shenanigans in the
-SVG code will cause the parser to just give up and return failure.
+The downside of this simplicity is that any fancy shenanigans
+in the SVG code will cause the parser to just give up and fail.
 
 Examples of what's NOT supported:
 
@@ -53,8 +53,7 @@ supports these optional keys:
 * `vph`: Like `vpw` but for height.
 ! -->
 
-Returns `false` on failure.
-Otherwise, returns a dictionary object with at least these properties:
+Returns a dictionary object with at least these properties:
 
 * `widthPx`, `widthFrac`, `heightPx`, `heightFrac`: Dimensions of the image.
   * If a dimension is given as absolute length, its `…Px` value will be set
