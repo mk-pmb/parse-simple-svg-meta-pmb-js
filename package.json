@@ -1,0 +1,32 @@
+{ "name": "parse-simple-svg-meta-pmb",
+  "version": "0.0.1",
+  "description": "Given the source of a simple SVG image, find basic info about its outermost SVG tag.",
+  "keywords": [
+    "svg"
+  ],
+
+  "author": "M.K. (https://github.com/mk-pmb)",
+  "homepage": "https://github.com/mk-pmb/parse-simple-svg-meta-pmb-js/#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mk-pmb/parse-simple-svg-meta-pmb-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mk-pmb/parse-simple-svg-meta-pmb-js/issues"
+  },
+  "contributors": [],
+
+  "private": true, "license": "ISC",
+
+  "main": "omst.js",
+  "scripts": { "test": "elp && nodemjs test/all.mjs" },
+  "directories": { "test": "test" },
+  "eslintConfig": { "extends": "nodejs-pmb" },
+
+  "dependencies": {},
+  "devDependencies": {
+  },
+
+
+  "npm vs. BOM = Unexpected token": "-*- coding: UTF-8 -*-"
+}
