@@ -1,33 +1,45 @@
 ﻿// -*- coding: utf-8, tab-width: 2 -*-
 
-const svgTagStartRx = /^<svg(?= |>)/;
-const boringPreStuff = /^(?:\s+|<(?:\?[ -;=\?-~]*\?|\!DOCTYPE [ -;=-~]*)>)*/i;
-const attrRx = /^ ?(>)|^ ([a-z:]+)="([ !#-;=\?-~]*)"/i;
-const lengthUnitRx = /^([0-9\.]+)(%|px|)$/;
+const rx = {
+  preWsp: /^\s+/,
+  xmlInitTag: /^<\?[ !-;=\?-~]*\?>/,
+  docTypeTag: /^<\!DOCTYPE [ -;=-~]*>/,
+  svgTagStart: /^<svg(?= |>)/i,
+  simpleAttr: /^([a-z:]+)=('|")([ !#-&\(-;=\?-~]*)('|")/i,
+  lengthUnit: /^([0-9\.]+)(%|px|)$/,
+};
+const emptyDummyIterable = '';
 
 
 const EX = function findSvgMeta(svg) {
   let buf = svg.replace(/\s+/g, ' ');
+  // console.debug('buf:', buf);
 
   function bad(want) {
     const found = (buf.slice(0, 32) || '(empty)');
     throw new Error('Expected ' + want + ' but found: ' + found);
   }
 
-  function eat(rx) {
-    const m = (rx.exec(buf) || false);
+  function eat(k) {
+    const m = (rx[k].exec(buf) || false);
+    // console.debug('buf:', buf);
+    // console.debug('eat:', rx[k], k, m);
     if (m) { buf = buf.slice(m[0].length); }
     return m;
   }
 
-  eat(boringPreStuff);
-  if (!eat(svgTagStartRx)) { bad('"<svg "'); }
+  // eslint-disable-next-line no-empty
+  while (eat('preWsp') || eat('xmlInitTag') || eat('docTypeTag')) {}
+
+  if (!eat('svgTagStart')) { bad('"<svg "'); }
   let attrs = {};
   while (true) { // eslint-disable-line no-constant-condition
-    const m = eat(attrRx);
-    if (!m) { bad('">" or an attribute'); }
-    if (m[1]) { break; }
-    attrs[m[2]] = m[3];
+    eat('preWsp');
+    if (buf.startsWith('>')) { break; }
+    const [m, k, q1, v, q2] = eat('simpleAttr') || emptyDummyIterable;
+    if (!m) { bad('">" or a simple attribute'); }
+    if (q1 !== q2) { bad('confusing quotes in attribute value'); }
+    attrs[k] = v;
   }
 
   attrs = {
@@ -47,7 +59,7 @@ Object.assign(EX, {
   decodeLength(attrs, dfFrac, key) {
     const orig = attrs[key];
     if (!orig) { return EX.pxFrac(key, 0, dfFrac); }
-    const m = lengthUnitRx.exec(orig);
+    const m = rx.lengthUnit.exec(orig);
     if (!m) {
       const msg = (key + ': Unsupported number format or length unit: ' + orig);
       throw new Error(msg);

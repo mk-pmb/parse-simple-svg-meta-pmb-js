@@ -1,5 +1,5 @@
 { "name": "parse-simple-svg-meta-pmb",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Given the source of a simple SVG image, find basic info about its outermost SVG tag.",
   "keywords": [
     "svg"

@@ -20,6 +20,15 @@ test([...dfHead, '<svg width="300">'], {
   heightFrac: 1,
 });
 
+test([...dfHead, "<svg xmlns='http://www.w3.org/2000/svg' version='1.1'>"], {
+  xmlns: 'http://www.w3.org/2000/svg',
+  version: '1.1',
+  widthPx: 0,
+  widthFrac: 1,
+  heightPx: 0,
+  heightFrac: 1,
+});
+
 test([...dfHead, '<svg width="23.5%" height="200px">'], {
   width: '23.5%',
   widthPx: 0,
